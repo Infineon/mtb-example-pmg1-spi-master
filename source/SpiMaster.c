@@ -4,7 +4,7 @@
  * Description: This file contains function definitions for SPI Master.
  *    
  *******************************************************************************
- * Copyright 2021-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2021-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -87,11 +87,10 @@ uint32_t initMaster(void)
     Cy_SCB_SPI_SetActiveSlaveSelect(mSPI_HW, CY_SCB_SPI_SLAVE_SELECT0);
 
     /* Populate configuration structure */
-
     const cy_stc_sysint_t mSPI_SCB_IRQ_cfg =
     {
-            .intrSrc      = mSPI_IRQ,
-            .intrPriority = mSPI_INTR_PRIORITY
+        .intrSrc      = mSPI_IRQ,
+        .intrPriority = mSPI_INTR_PRIORITY
     };
 
     /* Hook interrupt service routine and enable interrupt */
@@ -127,11 +126,10 @@ uint32_t initMaster(void)
  * successfully. Otherwise it returns 0xFF
  *
  ******************************************************************************/
-uint32_t sendPacket(uint8_t *txBuffer, uint8_t *rxBuffer, uint32 transferSize)
+uint32_t sendPacket(uint8_t *txBuffer, uint8_t *rxBuffer, uint32_t transferSize)
 {
     cy_en_scb_spi_status_t masterstatus;
     uint32_t slave_status;
-
 
     /* Initiate SPI Master write transaction. */
     masterstatus = Cy_SCB_SPI_Transfer(mSPI_HW, txBuffer, rxBuffer,
@@ -139,7 +137,7 @@ uint32_t sendPacket(uint8_t *txBuffer, uint8_t *rxBuffer, uint32 transferSize)
 
     if(masterstatus != CY_SCB_SPI_SUCCESS)
     {
-        CY_ASSERT(0);
+        CY_ASSERT(CY_ASSERT_FAILED);
     }
 
     /* Blocking wait for transfer completion */
@@ -150,7 +148,7 @@ uint32_t sendPacket(uint8_t *txBuffer, uint8_t *rxBuffer, uint32 transferSize)
 
     /* Check start and end of packet markers */
     if ((rxBuffer[PACKET_SOP_POS] == PACKET_SOP) &&\
-                                   (rxBuffer[PACKET_EOP_POS] == PACKET_EOP))
+        (rxBuffer[PACKET_EOP_POS] == PACKET_EOP))
     {
         /* Data received correctly */
         slave_status = rxBuffer[PACKET_CMD_POS];
@@ -159,7 +157,7 @@ uint32_t sendPacket(uint8_t *txBuffer, uint8_t *rxBuffer, uint32 transferSize)
     {
         /* Data was not received correctly */
         slave_status = 0xFF;
-        CY_ASSERT(0);
+        CY_ASSERT(CY_ASSERT_FAILED);
     }
 
     return (slave_status);

@@ -5,7 +5,7 @@
 *              SPI Master implemented using Serial Communication Block (SCB)
 *
 *******************************************************************************
-* Copyright 2021-2022, Cypress Semiconductor Corporation (an Infineon company) or
+* Copyright 2021-2023, Cypress Semiconductor Corporation (an Infineon company) or
 * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 *
 * This software, including source code, documentation and related
@@ -61,6 +61,9 @@
 
 /* Assign SPI interrupt priority */
 #define mSPI_INTR_PRIORITY  (3U)
+
+/* CY ASSERT failure */
+#define CY_ASSERT_FAILED    (0U)
 
 /***************************************
 *         Function Prototypes
